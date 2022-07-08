@@ -1,0 +1,103 @@
+@media only screen and (max-width: 767px) {
+    
+    header.navbar .navbar-nav {width:100%;}
+    .navbar-header {
+        width: 100%;
+    }
+    .navbar-toggle {
+        display: block;
+        background-color: #D5B024;
+        padding: 2px 5px;
+        float: right;
+        border-radius: 5px;
+        margin: 3px 0;
+    }
+    .navbar-toggle span {
+        width: 27px;
+        padding: 1px;
+        display: block;
+        background-color: #FFFFFF;
+        margin: 6px 0;
+    }
+    .navbar-nav.ml-auto a {
+        margin: 10px 0;
+    }
+
+    /* .sidenav {
+        display: none;
+    } */
+
+    .login-section {
+        width: 100%;
+        height: 100vh;
+        margin-top: 0;
+        box-shadow: 0 0 0;
+        padding: 15px;
+        overflow: auto;
+    }
+    
+    .reg-form {
+        padding: 0 15px;
+    }
+    .home-slider {
+        background-image: url(../images/delivery01.png);
+        background-position: top 100px right -70px;
+        background-size: 400px;
+        background-repeat: no-repeat;
+    }
+    .home-circle {
+        width: 300px;
+        height: 300px;
+        left: 10px;
+        top: 100px;
+        border: 1px solid #D5B024;
+        box-shadow: 0 0 5px inset #D5B024;
+    }
+    .home-delivery { display: none }
+    .blob {
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        top: 100px;
+        left: calc(50% - 150px);
+        background: radial-gradient(50% 50% at 50% 50%, rgba(213, 176, 36, 0.5) 0%, rgba(0, 0, 104, 0) 100%);
+    }
+    
+    .how-items-body {
+        margin-bottom: 35px;
+    }
+    
+    .download-app img {
+        float: none;
+        margin: auto
+    }
+    
+    .footlinks {
+        margin-bottom: 15px;
+    }
+    .about-us .container {
+        background: none;
+    }
+    .bike-image {
+        background-image: radial-gradient(rgba(0, 0, 100, 0.2), rgba(0,0,20,0.01) 50%, transparent), url(../images/delivery02.png);
+        background-repeat: no-repeat;
+        background-position: center, top 30px right 50px;
+        background-size: 400px 400px, 400px;
+        height: 300px;
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
