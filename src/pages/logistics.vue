@@ -1,5 +1,5 @@
 <template>
-  <title>Chattel | Dashboard</title>
+  <title>Chattel</title>
   <div class="container-fluid">
     <div class="row">
       <pageSidebar />
@@ -20,7 +20,7 @@
             <div class="row">
               <h6 class="clearfix col-sm-12 text-primary mb-4">Derron Group</h6>
               <div class="col-sm-5">
-                <img src="assets/images/logistics/logistic-1.jpg" alt="Logistic image" class="w-100 mb-4">
+                <div class=""></div>
 
                 <h6 class="text-primary mb-2">Description</h6>
                 <p class="mb-4">Derron group is an integrated logistics company with global
@@ -35,7 +35,7 @@
                     <div class="img-thumbnail p-2 mb-3">
                       <div class="row">
                         <div class="col-5">
-                          <img src="assets/images/logistics/logistic-1.jpg" class="w-100" alt="Service image">
+                          <img src="../../public/assets/images/logistics/logistic-1.jpg" class="w-100" alt="Service image">
                         </div>
                         <div class="col-7 p-0 d-flex">
                           <p class="w-100 m-auto">Derron Bike</p>
@@ -47,7 +47,7 @@
                     <div class="img-thumbnail p-2 mb-3">
                       <div class="row">
                         <div class="col-5">
-                          <img src="assets/images/logistics/logistic-2.jpg" class="w-100" alt="Service image">
+                          <img src="../../public/assets/images/logistics/logistic-2.jpg" class="w-100" alt="Service image">
                         </div>
                         <div class="col-7 p-0 d-flex">
                           <p class="w-100 m-auto">Derron Cars</p>
@@ -59,7 +59,7 @@
                     <div class="img-thumbnail p-2 mb-3">
                       <div class="row">
                         <div class="col-5">
-                          <img src="assets/images/logistics/logistic-3.jpg" class="w-100" alt="Service image">
+                          <img src="../../public/assets/images/logistics/logistic-3.jpg" class="w-100" alt="Service image">
                         </div>
                         <div class="col-7 p-0 d-flex">
                           <p class="w-100 m-auto">Derron Lorry</p>
@@ -71,7 +71,7 @@
                     <div class="img-thumbnail p-2 mb-3">
                       <div class="row">
                         <div class="col-5">
-                          <img src="assets/images/logistics/logistic-4.jpg" class="w-100" alt="Service image">
+                          <img src="../../public/assets/images/logistics/logistic-4.jpg" class="w-100" alt="Service image">
                         </div>
                         <div class="col-7 p-0 d-flex">
                           <p class="w-100 m-auto">Derron Ship</p>
@@ -83,7 +83,7 @@
               </div>
 
               <div class="col-sm-7">
-                <img src="assets/images/logistics/map-1.jpg" alt="Logistic map" class="w-100 mb-3">
+                <img src="../../public/assets/images/logistics/map-1.jpg" alt="Logistic map" class="w-100 mb-3">
                 <p class="mb-4">
                   <span class="mr-4"><i class="fa fa-square text-primary"></i> Coverage Area</span>
                   <span><i class="fa fa-square text-warning"></i> Coverage Area</span>
@@ -183,7 +183,8 @@ export default {
   data() {
     return {
       showchat: false,
-      pagebg: ''
+      pagebg: '',
+      companyId: this.$route.params.company_id,
     }
   },
   components: {

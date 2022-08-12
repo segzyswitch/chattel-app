@@ -13,7 +13,7 @@
             </div>
             <form method="POST" @submit.prevent="userLogin()" class="reg-form">
               <div class="form-group">
-                <label>Email</label>
+                <label>Email Address</label>
                 <input type="email" v-model="email" class="form-control" required />
               </div> 
               <div class="form-group">
@@ -52,7 +52,7 @@ export default {
     async userLogin() {
       this.loadBtn = true
       await axios({
-        url: 'https://chattelapi.kodeafrika.com/api/user_auth/login',
+        url: 'user_auth/login',
         method: "POST",
         data: {
           'email': this.email,

@@ -1,12 +1,12 @@
 <template>
   <header class="p-0 w-100 pt-2 pb-2 d-sm-none">
-    <router-link class="navbar-brand bg-white pl-3" to="/dashboard"><img src="assets/images/logo.png" class="" /></router-link>
+    <router-link class="navbar-brand bg-white pl-3" to="/dashboard"><img src="../../public/assets/images/logo.png" class="" /></router-link>
     <a href="#mySidebar" data-toggle="collapse" class="navbar-toggler p-3 text-primary float-right"><i class="fa fa-bars"></i></a>
   </header>
   <div class="col-sm-3 p-0 collapse navbar-collapse d-sm-block" id="mySidebar" style="z-index:9999;">
     <div class="w-100 sidenav col-sm-3 p-0">
       <div class="img-logo w-100 p-3 pt-5 pb-5 text-center d-none d-sm-block">
-        <router-link to="/dashboard"><img src="assets/images/logo.png" class="" /></router-link>
+        <router-link to="/dashboard"><img src="../../public/assets/images/logo.png" class="" /></router-link>
       </div>
       <div class="img-logo w-100 p-3 pb-5 d-sm-none">
         <router-link to="/dashboard" class="navbar-brand"><img src="assets/images/logo.png" class="" /></router-link>

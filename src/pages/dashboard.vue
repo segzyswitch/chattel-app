@@ -72,7 +72,7 @@ export default {
     if ( sessionStorage.getItem("Token") && sessionStorage.getItem("ProfileCode") ) {
       this.getUser();
     }else {
-      //this.$router.push("/login");
+      this.$router.push("/login");
     }
   }
 }
