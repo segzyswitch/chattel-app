@@ -30,7 +30,7 @@
       <div class="contain">
         <div class="row">
           <div class="col-sm-6">
-            <div class="w-100 p-3 logistic-item bg-secondary lazy d-flex">
+            <div class="w-100 p-3 logistic-item bg-secondary lazy d-flex w-100">
               <div class="w-100 m-auto">
                 <div class="row m-0 w-100">
                   <div class="icon bg-dark m-auto"></div>
@@ -52,7 +52,7 @@
             </div>
           </div>
           <div class="col-sm-6">
-            <div class="w-100 p-3 logistic-item bg-secondary lazy d-flex" style="animation-delay:0.2s;">
+            <div class="w-100 p-3 logistic-item bg-secondary lazy d-flex w-100" style="animation-delay:0.2s;">
               <div class="w-100 m-auto">
                 <div class="row m-0 w-100">
                   <div class="icon bg-dark m-auto"></div>
@@ -137,7 +137,7 @@ export default {
         this.sectionLoader = false
       })
       .catch( err => {
-        console.log(err);
+        console.log("catched error "+err.message);
         this.sectionLoader = false
       })
     },

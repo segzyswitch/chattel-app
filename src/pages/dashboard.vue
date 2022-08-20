@@ -16,7 +16,7 @@
         <nav class="row top-nav sticky-top">
           <div class="contain">
             <div class="float-left pt-2 pb-2 text-primary">
-              <h5>Hi {{userDetails.surname}}</h5>
+              <h5>Hi {{store.userDetails.surname}}</h5>
               <p class="m-0">Available logistics company</p>
             </div>
             <div class="float-right p-2">
@@ -32,36 +32,14 @@
 </template>
 
 <script>
-import axios from 'axios';
+import {store} from '../store';
 import pageSidebar from '../components/sidebar.vue';
 import homeLogistics from '../components/home-logistics.vue';
 export default {
+  name: "Dashboard",
   data() {
     return {
-      Token: sessionStorage.getItem('Token'),
-      ProfileCode: sessionStorage.getItem('ProfileCode'),
-      pageLoader: false,
-      userDetails: {}
-    }
-  },
-  methods: {
-    async getUser() {
-      this.pageLoader = true;
-      await axios({
-        url: 'user_auth/user?profile_code='+this.ProfileCode,
-        method: 'GET',
-        headers: {
-          'Authorization': 'Bearer ' + this.Token
-        }
-      })
-      .then( response => {
-        this.userDetails = response.data;
-        this.pageLoader = false;
-      })
-      .catch( err => {
-        this.pageLoader = 'timeout'
-        console.log(err)
-      })
+      store
     }
   },
   components: {
@@ -69,11 +47,7 @@ export default {
     homeLogistics
   },
   mounted() {
-    if ( sessionStorage.getItem("Token") && sessionStorage.getItem("ProfileCode") ) {
-      this.getUser();
-    }else {
-      this.$router.push("/login");
-    }
+    store.getUser()
   }
 }
 </script>

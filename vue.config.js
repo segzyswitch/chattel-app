@@ -1,4 +1,4 @@
-var link = "https://chattelapi.kodeafrika.com/api/";
+var link = "https://chattelapi.kodeafrika.com/api";
 
 module.exports = {
     devServer: {

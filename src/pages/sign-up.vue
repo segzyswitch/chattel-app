@@ -1,6 +1,6 @@
 <template>
-<title>Chattel | Sign in to your account</title>
   <div style="background-image:url('assets/images/bikebg.png'); background-size:cover;">
+    <title>Chattel | Sign in to your account</title>
 
     <section class="container-fluid">
       <div class="row">
@@ -32,42 +32,45 @@
                   <input type="text" v-model="phone_no" class="form-control" required />
                 </div>
               </div>
-              <div class="form-group">
-                <label>Gender</label>
-                <select v-model="gender" class="form-control" required>
-                  <option value="">Select gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                </select>
-              </div>
               <div class="row">
+                <div class="form-group col-sm-6">
+                  <label>Gender</label>
+                  <select v-model="gender" class="form-control" required>
+                    <option value="">Select gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                </div>
                 <div class="form-group col-sm-6">
                   <label for="">Street address</label>
                   <input type="text" v-model="address" class="form-control" required>
                 </div>
+              </div>
+              <div class="row">
                 <div class="form-group col-sm-6">
                   <label for="">City</label>
                   <input type="text" v-model="city" class="form-control" required>
                 </div>
+                <div class="form-group col-sm-6">
+                  <label for="country">Country</label>
+                  <select id="country" class="form-control" v-model="country" required>
+                    <option value="">Select country</option>
+                    <option v-for="region in countryIso"
+                      :key="region.alpha3Code"
+                      :value="{'name':region.englishShortName, 'code':region.alpha3Code}">
+                      {{ region.englishShortName }}
+                    </option>
+                  </select>
+                </div>
               </div>
               <div class="row">
-                <div class="form-group col-sm-6">
-                  <label for="">Country</label>
-                  <input type="text" v-model="country" class="form-control" required>
-                </div>
                 <div class="form-group col-sm-6">
                   <label for="">State</label>
                   <input type="text" v-model="state" class="form-control" required>
                 </div>
-              </div>
-              <div class="row">
                 <div class="form-group col-sm-6">
                   <label for="">Post code</label>
                   <input type="text" v-model="postcode" class="form-control" required>
-                </div>
-                <div class="form-group col-sm-6">
-                  <label for="">Country code</label>
-                  <input type="text" v-model="countrycode" class="form-control" required>
                 </div>
               </div>
               <div class="row mb-4">
@@ -97,9 +100,12 @@
 
 <script>
 import axios from 'axios'
+import countryIso from '../assets/country-and-iso.json'
 export default {
+  name: "UserRegister",
   data() {
     return {
+      countryIso: countryIso,
       Token: '',
       ProfileCode: '',
       surname: '',
@@ -107,10 +113,9 @@ export default {
       gender: '',
       address: '',
       state: '',
-      country: '',
+      country: [],
       city: '',
       postcode: '',
-      countrycode: '',
       phone_no: '',
       email: '',
       password: '',
@@ -130,10 +135,10 @@ export default {
           "gender": this.gender,
           "address": this.address,
           "state": this.state,
-          "country": this.country,
+          "country": this.country.name,
           "city": this.city,
           "postcode": this.postcode,
-          "countrycode": this.countrycode,
+          "countrycode": this.country.code,
           "phone_no": this.phone_no,
           "email": this.email,
           "password": this.password,
@@ -172,6 +177,9 @@ export default {
         this.loadbtn = false;
       })
     }
+  },
+  components: {
+    
   },
   mounted() {
     if ( sessionStorage.getItem('Token') && sessionStorage.getItem('ProfileCode') ) {

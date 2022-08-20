@@ -1,5 +1,6 @@
 <template>
-<title>IMESI-API | Sign in to your account</title>
+  <title>Chattel | Sign in to your account</title>
+  
   <div class="page-wrapper">
     <section class="login-section">
       <div class="well-auto">

@@ -1,6 +1,6 @@
 <template>
-<title>Chattel | Sign in to your account</title>
   <div style="background-image:url('assets/images/bikebg.png'); background-size:cover;">
+    <title>Chattel | Sign in to your account</title>
 
     <section class="container-fluid">
       <div class="row">

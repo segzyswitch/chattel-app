@@ -1,10 +1,18 @@
 <template>
-  <title>Chattel</title>
+  <title>{{ Logistic.business_name }} - Chattel</title>
   <div class="container-fluid">
+    
+    <!-- PAGE LOADER -->
+    <div class="page-loader d-flex text-center bg-white" v-if="pageLoader">
+      <div class="w-100 m-auto text-primary display-4">
+        <i class="fa fa-spinner fa-spin"></i>
+      </div>
+    </div>
+
     <div class="row">
       <pageSidebar />
 
-      <div class="col-sm-9">
+      <div class="col-sm-9" v-if="!pageLoader">
         <nav class="row top-nav sticky-top">
           <div class="contain">
             <div class="float-left pt-2 pb-2">
@@ -15,20 +23,59 @@
             </div>
           </div>
         </nav>
+
         <div class="row pt-4" :style="'background-color:'+pagebg">
           <div class="contain">
             <div class="row">
-              <h6 class="clearfix col-sm-12 text-primary mb-4">Derron Group</h6>
+              <h4 class="clearfix col-sm-12 text-primary mb-4">{{ Logistic.business_name }}</h4>
               <div class="col-sm-5">
-                <div class=""></div>
+                <div class="w-100 p-3">
+                  <div class="img-100 d-flex bg-primary m-auto text-white">
+                    <div class="w-100 m-auto text-center">{{ Logistic.business_name.substring(0,2) }}</div>
+                  </div>
+                </div>
 
+                <p class="mt-3">
+                  <span class="text-primary btn-sm btn"><i class="fa fa-thumbs-o-up"></i> {{ store.getLikes(Logistic.profile_code) }}</span>
+                  <span class="text-primary btn-sm btn"><i class="fa fa-thumbs-o-down"></i> 12</span>
+                  <span class="text-primary btn btn-sm">Fast Delivery</span>
+                  <span class="text-primary btn btn-sm">Maximum: {{ Logistic.maximum_size }}</span>
+                </p>
                 <h6 class="text-primary mb-2">Description</h6>
-                <p class="mb-4">Derron group is an integrated logistics company with global
-                perspective that offers diverse services to the maritime</p>
+                <p class="mb-4">{{Logistic.about}}</p>
 
                 <h6 class="mb-2 text-primary">Contact Us</h6>
-                <p class="mb-4">Call Us: <a href="tel:081646667228" class="text-dark">081646667228</a></p>
+                <p class="mb-4">Call Us: <a :href="'tel:'+Logistic.phone_no" class="text-primary">{{Logistic.phone_no}}</a></p>
+
                 
+                <h6 class="mb-2 text-primary">Comments</h6>
+
+                <form action="/" @submit.prevent="addComment()" class="comment-form">
+                  <div class="form-group mb-2">
+                    <textarea class="form-control" v-model="feed" placeholder="Say something..." required></textarea>
+                  </div>
+                  <div class="form-group" style="overflow:auto;">
+                    <small class="btn btn-sm text-danger" v-if="commentErr">{{ commentErr }}</small>
+                    <span class="btn" v-if="commentOk">{{ commentOk }}</span>
+                    <button class="btn btn-sm btn-dark pull-right" type="submit" v-if="!commentBtn">Add comment</button>
+                    <button class="btn btn-sm btn-dark pull-right" type="button" disabled v-if="commentBtn"><i class="fa fa-spinner fa-spin"></i> Sending...</button>
+                  </div>
+                </form>
+
+                <div class="comment-list w-100 mb-5">
+                  <div v-for="item in commentData" :key="item.id" class="comment-item w-100">
+                    <div class="comment-img text-white d-flex bg-secondary" style="margin-top:10px;">
+                      <p class="m-0 m-auto text-center">AB</p>
+                    </div>
+                    <div class="comment-info p-2">
+                      <b class="d-block">John Doe</b>
+                      <span class="d-block">{{item.comment}}</span>
+                      <small style="opacity:0.5;">{{ store.toFullDate(item.created_at) }}</small>
+                    </div>
+                  </div>
+                </div>
+
+                <!--                 
                 <h6 class="mb-3 text-primary">Our services</h6>
                 <div class="row">
                   <div class="col-sm-6 pr-0">
@@ -80,6 +127,7 @@
                     </div>
                   </div>
                 </div>
+                -->
               </div>
 
               <div class="col-sm-7">
@@ -179,20 +227,122 @@
 
 <script>
 import pageSidebar from '../components/sidebar.vue'
+import axios from 'axios'
+import {store} from '../store'
 export default {
   data() {
     return {
+      store,
       showchat: false,
       pagebg: '',
       companyId: this.$route.params.company_id,
+      Logistic: [],
+      pageLoader: true,
+      Token: sessionStorage.getItem("Token"),
+      commentBtn: false,
+      commentOk: null,
+      commentErr: null,
+      commentData: []
+    }
+  },
+  methods: {
+    async fetchLogistic() {
+      this.pageLoader = true;
+      await axios({
+        method: 'GET',
+        url: '/logistic_user_auth/logistic_profile?profile_code='+this.companyId,
+        headers: {
+          'Authorization': 'Bearer ' + this.Token
+        }
+      })
+      .then ( response => {
+        console.log(response.data)
+        this.Logistic = response.data
+        this.pageLoader = false;
+      })
+      .catch( err => {
+        console.log("Error handle"+err.message)
+        this.pageLoader = true;
+        if (err == 'Request failed with status code 503') {
+          sessionStorage.removeItem('Token');
+          this.$router.push("/")
+          console.log(err)
+        }
+      })
+    },
+    
+    async addComment() {
+      this.commentBtn = true
+      const fd = new FormData();
+      fd.append("user_profile_code", this.store.userDetails.profile_code)
+      fd.append("logistic_profile_code", this.companyId)
+      fd.append("comment", this.feed)
+      await axios({
+        method: 'POST',
+        url: '/user_auth/add_comment',
+        data: fd,
+        headers: {
+          'Authorization': 'Bearer ' + this.Token
+        }
+      })
+      .then( response =>{
+        if (response.data.status == true) {
+          this.commentErr = ""
+          this.feed = ""
+          this.commentOk = "Review sent!"
+        }else {
+          this.commentErr = response.data
+          this.commentOk = ""
+        }
+        this.commentBtn = false
+      })
+      .catch( err => {
+        this.commentErr = err.message
+        this.commentOk = ''
+        this.commentBtn = false
+      })
+    },
+
+    async fetchComments() {
+      await axios({
+        method: 'GET',
+        url: '/user_auth/view_comments?logistic_profile_code='+this.companyId,
+        headers: {
+          'Authorization': 'Bearer ' + this.Token
+        }
+      })
+      .then( response => {
+        console.log(response.data)
+        if ( response.data.status == true ) {
+          this.commentData = response.data.comments
+          this.fetchComments();
+        }else {
+          this.commentDataErr = "Error fetching comments";
+        }
+      })
+      .catch( err => {
+        this.commentDataErr = "Error fetching comments. "+err.message;
+      });
     }
   },
   components: {
     pageSidebar
+  },
+  mounted() {
+    this.fetchLogistic();
+    this.fetchComments();
   }
 }
 </script>
+
+
 <style scoped>
+.img-100 {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  font-size: 40px;
+}
 .message-panel {
   min-height: 200px;
   height: calc(100vh - 350px);
@@ -218,4 +368,22 @@ export default {
 .form-btns button {
   box-shadow: 0 0 0;
 }
+
+.comment-item {
+  overflow: auto;
+  width: 100%;
+}
+.comment-img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  overflow: hidden;
+  float: left;
+}
+.comment-info {
+  width: calc(100% - 40px);
+  float: left;
+  font-size: 90%;
+}
+
 </style>

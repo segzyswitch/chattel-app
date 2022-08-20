@@ -28,10 +28,11 @@
 
 <script>
 import axios from 'axios'
+import {store} from '../store'
 export default {
   data() {
     return {
-      Token: sessionStorage.getItem("Token")
+      store
     }
   },
   methods: {
@@ -46,12 +47,13 @@ export default {
       })
       .then( result => {
         if ( result.isConfirmed ) {
+          this.store.pageLoader = true
           axios({
             url: 'user_auth/logout',
             method: "POST",
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + this.Token
+              'Authorization': 'Bearer ' + this.store.Token
             }
           })
           .then ( response => {
@@ -63,15 +65,14 @@ export default {
               icon: 'success',
               text: response.data.message
             });
+            this.store.pageLoader = false
           })
           .catch( err => {
-            this.$swal.fire({
-              type: 'warning',
-              icon: 'warning',
-              title: "CHATTEL",
-              text: err.message
-            })
+            sessionStorage.removeItem("Token");
+            sessionStorage.removeItem("ProfileCode");
+            this.$router.push("/login");
             console.log(err.message)
+            this.store.pageLoader = false
           })
         }
       })
