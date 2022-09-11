@@ -5,7 +5,7 @@
         <div class="row pt-4 pb-4">
           <div class="col-sm-4 m-auto">
             <div class="input-group">
-              <input type="search" id="com_search" class="form-control" placeholder="Search company" style="border-right:0;box-shadow:none;">
+              <input type="search" id="com_search" v-model="search" class="form-control" placeholder="Search company" style="border-right:0;box-shadow:none;">
               <div class="input-group-append">
                 <label for="com_search" class="input-group-text bg-white"><i class="fa fa-search"></i></label>
               </div>
@@ -24,8 +24,10 @@
             </div>
           </div>
         </div>
+        <h6 class="text-secondary" v-if="search">Showing result of <i>"{{ search }}"</i></h6>
       </div>
     </div>
+
     <div class="row mt-3" v-if="sectionLoader">
       <div class="contain">
         <div class="row">
@@ -80,7 +82,7 @@
     <div class="row mt-3 mb-5" v-if="!sectionLoader">
       <div class="contain">
         <div class="row">
-          <div class="col-sm-6" v-for="companies in LogistIcs" :key="companies.profile_code">
+          <div class="col-sm-6" v-for="companies in filteredData" :key="companies.profile_code">
             <router-link :to="{name:'Logistics', params:{company_id:companies.profile_code}}" class="w-100 p-3 logistic-item d-block">
               <div class="row m-0 w-100">
                 <div class="icon bg-primary m-auto">
@@ -96,7 +98,7 @@
               </div>
               <div class="row m-0 w-100">
                 <p class="m-0">
-                  <span class="text-primary btn-sm btn"><i class="fa fa-thumbs-o-up"></i> {{ store.getLikes(companies.profile_code) }}</span>
+                  <span class="text-primary btn-sm btn"><i class="fa fa-thumbs-o-up"></i> 10</span>
                   <span class="text-primary btn-sm btn"><i class="fa fa-thumbs-o-down"></i> 12</span>
                   <span class="text-primary btn btn-sm">Fast Delivery</span>
                   <span class="text-primary btn btn-sm">Maximum: {{ companies.maximum_size }}</span>
@@ -112,14 +114,15 @@
 
 <script>
 import axios from 'axios';
-import {store} from '../store'
+//import {store} from '../store'
 export default {
   data() {
     return {
-      LogistIcs: [],
+      LogistIcs: {},
       Token: sessionStorage.getItem("Token"),
       sectionLoader: true,
-      store
+      search: ''
+      //store
     }
   },
   methods: {
@@ -143,9 +146,21 @@ export default {
     },
   },
   computed: {
-    
+    filteredData() {
+      if ( this.LogistIcs ) {
+        let needle = this.search.toLowerCase()
+        return this.LogistIcs
+          .filter(
+            ({ business_name, city, country, covered_area, business_address }) =>
+            [business_name, city, country, covered_area, business_address]
+            .some(val => val.toLowerCase().includes(needle))
+          );
+      }else {
+        return []
+      }
+    }
   },
-  mounted() {
+  beforeMount() {
     this.fetchLogistics();
   }
 }

@@ -86,35 +86,42 @@ const routes = [
         meta: {auth: true}
     },
     {
-        path: "/message",
+        path: "/message/:logistic_profile_code",
         name: "Message",
         component: () =>
         import(/* webpackChunkName: "Message" */ "../src/pages/message.vue"),
         meta: {auth: true}
     },
     {
-        path: "/agreement",
+        path: "/agreement/:logistic_profile_code",
         name: "Agreement",
         component: () =>
         import(/* webpackChunkName: "Agreement" */ "../src/pages/agreement.vue"),
         meta: {auth: true}
     },
     {
-        path: "/payment-method",
+        path: "/payment-method/:logistic_profile_code",
         name: "paymentMethod",
         component: () =>
         import(/* webpackChunkName: "paymentMethod" */ "../src/pages/payment-method.vue"),
         meta: {auth: true}
     },
     {
-        path: "/paywithcard",
+        path: "/paywithcard/:logistic_profile_code",
         name: "payWithCard",
         component: () =>
         import(/* webpackChunkName: "payWithCard" */ "../src/pages/paywithcard.vue"),
         meta: {auth: true}
     },
     {
-        path: "/track-delivery",
+        path: "/paywithwallet/:logistic_profile_code",
+        name: "payWithWallet",
+        component: () =>
+        import(/* webpackChunkName: "payWithWallet" */ "../src/pages/paywithwallet.vue"),
+        meta: {auth: true}
+    },
+    {
+        path: "/track-delivery/:logistic_profile_code",
         name: "trackDelivery",
         component: () =>
         import(/* webpackChunkName: "trackDelivery" */ "../src/pages/track-delivery.vue"),

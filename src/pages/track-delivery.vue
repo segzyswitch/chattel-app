@@ -18,7 +18,7 @@
         <div class="row">
           <div class="contain" style="background-color:#FFFFFF;min-height:calc(100vh - 200px);">
             <!-- CHAT PANEL -->
-            <img src="assets/images/logistics/track-img.jpg" class="w-100 mb-3" alt="">
+            <img src="../../public/assets/images/logistics/track-img.jpg" class="w-100 mb-3" alt="">
 
             <div class="row mb-3">
               <div class="col-sm-6">

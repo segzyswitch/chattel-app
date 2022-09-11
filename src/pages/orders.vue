@@ -20,7 +20,7 @@
             <div class="w-100">
               <div class="d-block chat-head p-3 mb-3">
                 <h6 class="pt-2 text-primary">Wallet Balance</h6>
-                <div class="btn btn-sm bg-white">NGN 300,000</div>
+                <div class="btn btn-sm bg-white">NGN {{ store.userDetails.balance+'.00' }}</div>
               </div>
               <table class="table">
                 <thead class="bg-primary text-white">
@@ -62,17 +62,21 @@
 </template>
 
 <script>
-import pageSidebar from '../components/sidebar.vue'
-export default {
-  data() {
-    return {
-
+  import { store } from '../store'
+  import pageSidebar from '../components/sidebar.vue'
+  export default {
+    data() {
+      return {
+        store
+      }
+    },
+    components: {
+      pageSidebar
+    },
+    mounted() {
+      this.store.getUser();
     }
-  },
-  components: {
-    pageSidebar
   }
-}
 </script>
 <style scoped>
 table {font-size:14px;}

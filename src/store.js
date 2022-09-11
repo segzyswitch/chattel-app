@@ -37,31 +37,8 @@ export const store = reactive({
       day = ("0" + date.getDate()).slice(-2),
       hrs = ("0" + date.getHours()).slice(-2),
       mins = ("0" + date.getMinutes()).slice(-2);
-    var fulldate = mnth+"/"+day+", "+date.getFullYear();
+    var fulldate = day+"/"+mnth+"/"+date.getFullYear();
     var fulltime = [hrs, mins].join(':');
     return fulldate+" "+fulltime
-  },
-
-  getLikes(needle) {
-    let showLikes = 0;
-    axios({
-      method: "GET",
-      url: "/user_auth/view_likes?logistic_profile_code="+needle,
-      headers: {
-        'Authorization': 'Bearer ' + this.Token
-      }
-    })
-    .then ( response => {
-      if ( response.data.status == 'success' ) {
-        //console.log(response.data)
-        //showLikes = response.data.likes_count
-        showLikes = response.data.likes_count
-      }
-    })
-    .catch ( err => {
-      console.log(err.message)
-
-    })
-    return showLikes
-  }  
+  }
 });

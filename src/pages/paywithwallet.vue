@@ -16,23 +16,31 @@
           </div>
         </nav>
         <div class="row">
-          <div class="contain" style="background-color:#FAFAFA;min-height:calc(100vh - 200px);">
-            <!-- CHAT PANEL -->
-            <div class="chat-panel">
+          <div class="contain d-flex" style="background-color:#FAFAFA;min-height:calc(100vh - 200px);">
+          
+            <div class="w-100" v-if="!paymentSuccess">
               <div class="d-block chat-head p-3 mb-3">
-                <h6 class="pt-2 m-0 text-primary">Payment Method</h6>
+                <h5 class="pt-2 m-0 text-primary">Wallet Balance</h5>
               </div>
-              <div class="col-sm-7">
+              <form method="GET" @submit.prevent="paymentSuccess=true" class="col-sm-7 card-form">
                 <div class="form-group">
-                  <router-link
-                    :to="{name: 'payWithCard', params: {logistic_profile_code: companyId}}"
-                    class="btn bg-white btn-block text-left text-secondary">Pay with card</router-link>
+                  <div class="form-control"><b>N200</b></div>
                 </div>
                 <div class="form-group">
-                  <router-link
-                    :to="{name: 'payWithWallet', params: {logistic_profile_code: companyId}}"
-                    class="btn bg-white btn-block text-left text-secondary">Pay with wallet</router-link>
+                  <label for="amount">Enter amount</label>
+                  <input type="text" id="amount" class="form-control">
                 </div>
+                <div class="form-group">
+                  <button class="btn btn-primary btn-block">Pay</button>
+                </div>
+              </form>
+            </div>
+            
+            <div class="w-100 text-center m-auto" v-if="paymentSuccess">
+              <div class="col-sm-5 clearfix m-auto">
+                <img src="assets/images/logistics/cargo.jpg" class="img-fluid" alt="">
+                <h6 class="mb-5">Your goods are on their way</h6>
+                <router-link :to="{name: 'trackDelivery', params: {logistic_profile_code: companyId}}" class="btn btn-primary btn-block">Track Delivery</router-link>
               </div>
             </div>
           </div>
@@ -47,6 +55,7 @@ import pageSidebar from '../components/sidebar.vue'
 export default {
   data() {
     return {
+      paymentSuccess: false,
       companyId: this.$route.params.logistic_profile_code
     }
   },
@@ -58,5 +67,9 @@ export default {
 <style scoped>
 .chat-head {
   background-color: #FAFAFA;
+}
+.card-form .form-control {
+  border: none;
+  box-shadow: none;
 }
 </style>

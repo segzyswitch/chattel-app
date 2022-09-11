@@ -1,5 +1,5 @@
 <template>
-  <title>{{ Logistic.business_name }} - Chattel</title>
+  <title>{{ Logistic.business_name+" logistics - " }} Chattel</title>
   <div class="container-fluid">
     
     <!-- PAGE LOADER -->
@@ -36,7 +36,7 @@
                 </div>
 
                 <p class="mt-3">
-                  <span class="text-primary btn-sm btn"><i class="fa fa-thumbs-o-up"></i> {{ store.getLikes(Logistic.profile_code) }}</span>
+                  <span class="text-primary btn-sm btn"><i class="fa fa-thumbs-o-up"></i> 10</span>
                   <span class="text-primary btn-sm btn"><i class="fa fa-thumbs-o-down"></i> 12</span>
                   <span class="text-primary btn btn-sm">Fast Delivery</span>
                   <span class="text-primary btn btn-sm">Maximum: {{ Logistic.maximum_size }}</span>
@@ -45,7 +45,7 @@
                 <p class="mb-4">{{Logistic.about}}</p>
 
                 <h6 class="mb-2 text-primary">Contact Us</h6>
-                <p class="mb-4">Call Us: <a :href="'tel:'+Logistic.phone_no" class="text-primary">{{Logistic.phone_no}}</a></p>
+                <p class="mb-5">Call Us: <a :href="'tel:'+Logistic.phone_no" class="text-primary">{{Logistic.phone_no}}</a></p>
 
                 
                 <h6 class="mb-2 text-primary">Comments</h6>
@@ -62,15 +62,15 @@
                   </div>
                 </form>
 
-                <div class="comment-list w-100 mb-5">
+                <div class="comment-list w-100 mb-5" v-if="commentData">
                   <div v-for="item in commentData" :key="item.id" class="comment-item w-100">
                     <div class="comment-img text-white d-flex bg-secondary" style="margin-top:10px;">
-                      <p class="m-0 m-auto text-center">AB</p>
+                      <p style="text-transform:uppercase;" class="m-0 m-auto text-center">{{ item.user.substring(0,2) }}</p>
                     </div>
                     <div class="comment-info p-2">
-                      <b class="d-block">John Doe</b>
-                      <span class="d-block">{{item.comment}}</span>
-                      <small style="opacity:0.5;">{{ store.toFullDate(item.created_at) }}</small>
+                      <b class="d-block">{{ item.user }}</b>
+                      <span class="d-block">{{ item.comments }}</span>
+                      <small style="opacity:0.5;">{{ store.toFullDate(item.commented_on) }}</small>
                     </div>
                   </div>
                 </div>
@@ -148,7 +148,11 @@
                     <p class="float-left pl-3 pt-2 m-0 text-primary">Darren Groups</p>
                     <a href="javascript:void(0)" class="float-right p-2 text-secondary"><i class="fa fa-ellipsis-h"></i></a>
                     <a href="javascript:void(0)" @click="showchat=false, pagebg='transparent'" class="float-right p-2 text-secondary"><i class="fa fa-times"></i></a>
-                    <router-link to="/message" class="float-right p-2 text-secondary"><i class="fa fa-expand"></i></router-link>
+                    <router-link
+                      :to="{name:'Message', params: {logistic_profile_code: Logistic.profile_code}}"
+                      class="float-right p-2 text-secondary">
+                      <i class="fa fa-expand"></i>
+                    </router-link>
                   </div>
                   <div class="card-body p-3 message-panel" v-if="showchat">
                     <div class="row left-msg p-2">
@@ -290,6 +294,7 @@ export default {
           this.commentErr = ""
           this.feed = ""
           this.commentOk = "Review sent!"
+          this.fetchComments();
         }else {
           this.commentErr = response.data
           this.commentOk = ""
@@ -314,8 +319,7 @@ export default {
       .then( response => {
         console.log(response.data)
         if ( response.data.status == true ) {
-          this.commentData = response.data.comments
-          this.fetchComments();
+          this.commentData = response.data.details
         }else {
           this.commentDataErr = "Error fetching comments";
         }
@@ -378,6 +382,7 @@ export default {
   height: 30px;
   border-radius: 50%;
   overflow: hidden;
+  font-size: 12px;
   float: left;
 }
 .comment-info {

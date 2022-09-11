@@ -22,7 +22,9 @@
               <div class="d-block chat-head p-3">
                 <div class="float-left rounded-circle bg-primary text-light p-2">DG</div>
                 <p class="float-left pl-3 pt-2 m-0 text-primary">Darren Groups</p>
-                <router-link to="/agreement" class="btn btn-sm bg-white mt-1 text-primary float-right">Agreement form</router-link>
+                <router-link
+                  :to="{name: 'Agreement', params:{logistic_profile_code: companyId}}"
+                  class="btn btn-sm bg-white mt-1 text-primary float-right">Agreement form</router-link>
               </div>
               <div class="card-body p-4 pt-0 message-panel">
                 <div class="row left-msg p-2">
@@ -72,7 +74,7 @@ import pageSidebar from '../components/sidebar.vue'
 export default {
   data() {
     return {
-      
+      companyId: this.$route.params.logistic_profile_code,
     }
   },
   components: {

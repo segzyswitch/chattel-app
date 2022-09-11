@@ -21,7 +21,7 @@
               <div class="col-sm-6">
                 <h5 class="mb-4">Wallet</h5>
                 <p class="mb-1">Total Balance</p>
-                <span class="btn bg-white btn-sm">NGN 75,000,000</span>
+                <span class="btn bg-white btn-sm">NGN {{ store.userDetails.balance+'.00' }}</span>
               </div>
               <div class="col-sm-6 m-auto" style="overflow:auto;">
                 <div class="float-right ml-5">
@@ -132,15 +132,19 @@
 </template>
 
 <script>
+import { store } from '../store'
 import pageSidebar from '../components/sidebar.vue'
 export default {
   data() {
     return {
-      
+      store
     }
   },
   components: {
     pageSidebar
+  },
+  mounted() {
+    this.store.getUser();
   }
 }
 </script>
