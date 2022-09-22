@@ -59,7 +59,7 @@ export default {
           .then ( response => {
             sessionStorage.removeItem("Token");
             sessionStorage.removeItem("ProfileCode");
-            this.$router.push("/login");
+            this.$router.push("/sign-in");
             this.$swal.fire({
               type: "success",
               icon: 'success',

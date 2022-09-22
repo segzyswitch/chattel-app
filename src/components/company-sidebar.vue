@@ -20,11 +20,67 @@
         <router-link to="/company-message" class="side-link"><i class="fa fa-list"></i> Message</router-link>
       </div>
       <div class="w-100 p-3 bottom-link  text-center">
-        <router-link to="/" class="text-danger d-block p-2">Logout</router-link>
+        <button @click="Logout()" class="btn btn-block btn-link text-danger d-block p-2">Logout</button>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+import axios from 'axios'
+import {globals} from '../globals'
+export default {
+  data() {
+    return {
+      globals
+    }
+  },
+  methods: {
+    Logout() {
+      this.$swal.fire({
+        type: "warning",
+        icon: 'warning',
+        text: "Are you sure you want to logout?",
+        showConfirmButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Yes, logout",
+      })
+      .then( result => {
+        if ( result.isConfirmed ) {
+          this.globals.pageLoader = true
+          axios({
+            url: '/logistic_user_auth/logout',
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + this.Token
+            }
+          })
+          .then ( response => {
+            sessionStorage.removeItem("Token");
+            sessionStorage.removeItem("ProfileCode");
+            this.$router.push("/sign-in");
+            this.$swal.fire({
+              type: "success",
+              icon: 'success',
+              text: response.data.message
+            });
+            this.store.pageLoader = false
+          })
+          .catch( err => {
+            sessionStorage.removeItem("Token");
+            sessionStorage.removeItem("ProfileCode");
+            this.$router.push("/sign-in");
+            console.log(err.message)
+            this.store.pageLoader = false
+          })
+        }
+      })
+    }
+  }
+}
+</script>
+
 <style scoped>
 .sidenav {
   position: fixed;

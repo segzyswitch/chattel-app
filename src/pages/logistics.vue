@@ -47,9 +47,7 @@
                 <h6 class="mb-2 text-primary">Contact Us</h6>
                 <p class="mb-5">Call Us: <a :href="'tel:'+Logistic.phone_no" class="text-primary">{{Logistic.phone_no}}</a></p>
 
-                
                 <h6 class="mb-2 text-primary">Comments</h6>
-
                 <form action="/" @submit.prevent="addComment()" class="comment-form">
                   <div class="form-group mb-2">
                     <textarea class="form-control" v-model="feed" placeholder="Say something..." required></textarea>
@@ -243,6 +241,7 @@ export default {
       Logistic: [],
       pageLoader: true,
       Token: sessionStorage.getItem("Token"),
+      feed: null,
       commentBtn: false,
       commentOk: null,
       commentErr: null,

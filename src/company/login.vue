@@ -79,7 +79,7 @@ export default {
           sessionStorage.setItem("ProfileCode", response.data.user.profile_code);
           this.$router.push('/company');
         }else {
-          this.loginErr = response.data.message[0]
+          this.loginErr = response.data.message
         }
         this.loadBtn = false
       })

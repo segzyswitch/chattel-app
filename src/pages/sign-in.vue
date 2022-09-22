@@ -10,14 +10,15 @@
         <p style="color:#aaa;"><small>Already have an account?, <router-link to="/login" style="color:#ccc;">Login</router-link></small></p>
       </div>
     </section>
-
   </div>
 </template>
 
 <style scoped>
 .page-wrapper {
   background-image :url('../../public/assets/images/bikebg.png');
-  background-size: cover;
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
   height: 100vh;
   overflow: auto;
 }

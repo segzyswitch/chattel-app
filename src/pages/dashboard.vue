@@ -39,7 +39,8 @@ export default {
   name: "Dashboard",
   data() {
     return {
-      store
+      store,
+      pageLoader: false
     }
   },
   components: {

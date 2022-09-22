@@ -47,16 +47,7 @@
                 </div>
 
                 <!-- AGREEMENT -->
-                <div class="w-100 bg-white p-3 round-15 mb-3">
-                  <h6 class="text-primary mb-3" style="overflow:auto;">
-                    <span class="float-left pt-1">Agreement Form</span>
-                    <router-link to="/company-agreement" class="btn btn-sm float-right">View All</router-link>
-                  </h6>
-
-                  <div class="w-100 bg-light p-2 well-sm mb-2">Shola dropped a message for you.</div>
-                  <div class="w-100 bg-light p-2 well-sm mb-2">Shola dropped a message for you.</div>
-                  <div class="w-100 bg-light p-2 well-sm mb-2">Shola dropped a message for you.</div>
-                </div>
+                <CompanyAgreement />
 
                 <!-- NOTIFICATION -->
                 <div class="w-100 bg-white p-3 round-15 mb-3">
@@ -80,6 +71,7 @@
 
 <script>
 import pageSidebar from '../components/company-sidebar.vue'
+import CompanyAgreement from '../components/company-agreement.vue'
 import { globals } from '../globals'
 export default {
   data() {
@@ -88,7 +80,8 @@ export default {
     }
   },
   components: {
-    pageSidebar
+    pageSidebar,
+    CompanyAgreement
   },
   beforeMount() {
     this.globals.getUser();
@@ -101,6 +94,7 @@ export default {
   height: 9em;
   border-radius: 50%;
   margin-bottom: 30px!important;
+  box-shadow: 0 0 10px #777;
 }
 .well-sm {
   font-size: small;

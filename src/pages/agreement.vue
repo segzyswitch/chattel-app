@@ -107,9 +107,9 @@ export default {
           this.size = null;
           this.description = null;
           this.address = null;
-          this.$router.push({name:'paymentMethod', params:{logistic_profile_code: this.companyId}})
+          //this.$router.push({name:'paymentMethod', params:{logistic_profile_code: this.companyId}})
         }else {
-          this.agreementErr = response.data.message[0]
+          this.agreementErr = response.data.message
           this.agreementOk = null
         }
         this.loadBtn = false
