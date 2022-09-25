@@ -83,7 +83,7 @@ export default {
     pageSidebar,
     CompanyAgreement
   },
-  beforeMount() {
+  mounted() {
     this.globals.getUser();
   }
 }
