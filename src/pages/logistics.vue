@@ -27,17 +27,23 @@
         <div class="row pt-4" :style="'background-color:'+pagebg">
           <div class="contain">
             <div class="row">
-              <h4 class="clearfix col-sm-12 text-primary mb-4">{{ Logistic.business_name }}</h4>
               <div class="col-sm-5">
                 <div class="w-100 p-3">
                   <div class="img-100 d-flex bg-primary m-auto text-white">
-                    <div class="w-100 m-auto text-center">{{ Logistic.business_name.substring(0,2) }}</div>
+                    <div class="w-100 m-auto text-center text-uppercase">{{ Logistic.business_name.substring(0,2) }}</div>
                   </div>
+                  <h4 class="text-center col-sm-12 text-primary mb-2 mt-3">{{ Logistic.business_name }}</h4>
                 </div>
 
                 <p class="mt-3">
-                  <span class="text-primary btn-sm btn"><i class="fa fa-thumbs-o-up"></i> 10</span>
-                  <span class="text-primary btn-sm btn"><i class="fa fa-thumbs-o-down"></i> 12</span>
+                  <button class="btn-link text-primary btn-sm btn" :disabled="loadLK" @click="Like()">
+                    <i style="font-size:2em;" class="fa fa-thumbs-up"></i> 
+                    {{ allLikes }}
+                  </button>
+                  <button class="btn-link text-primary btn-sm btn" :disabled="loadDL" @click="disLike()">
+                    <i style="font-size:2em;" class="fa fa-thumbs-down"></i> 
+                    {{ alldisLikes }}
+                  </button>
                   <span class="text-primary btn btn-sm">Fast Delivery</span>
                   <span class="text-primary btn btn-sm">Maximum: {{ Logistic.maximum_size }}</span>
                 </p>
@@ -245,7 +251,11 @@ export default {
       commentBtn: false,
       commentOk: null,
       commentErr: null,
-      commentData: []
+      commentData: [],
+      allLikes: null,
+      alldisLikes: null,
+      loadLK: false,
+      loadDL: false
     }
   },
   methods: {
@@ -259,7 +269,7 @@ export default {
         }
       })
       .then ( response => {
-        console.log(response.data)
+        //console.log(response.data)
         this.Logistic = response.data
         this.pageLoader = false;
       })
@@ -316,7 +326,7 @@ export default {
         }
       })
       .then( response => {
-        console.log(response.data)
+        //console.log(response.data)
         if ( response.data.status == true ) {
           this.commentData = response.data.details
         }else {
@@ -326,6 +336,91 @@ export default {
       .catch( err => {
         this.commentDataErr = "Error fetching comments. "+err.message;
       });
+    },
+    
+    async Like() {
+      this.loadLK = true;
+      await axios({
+        method: 'GET',
+        url: '/user_auth/add_like?user_profile_code='+this.store.ProfileCode+'&logistic_profile_code='+this.companyId,
+        headers: {
+          'Authorization': 'Bearer ' + this.Token
+        }
+      })
+      .then( response => {
+        //console.log(response.data)
+        if ( response.data.status == 'success' ) {
+          this.fetchLikes();
+          this.loadLK = false;
+        }else {
+          //console.log(response.data)
+          this.fetchLikes();
+          this.loadLK = false;
+        }
+      })
+      .catch( err => {
+        console.log(err)
+      });
+    },
+    async disLike() {
+      this.loadDL = true;
+      await axios({
+        method: 'GET',
+        url: '/user_auth/add_dis_like?user_profile_code='+this.store.ProfileCode+'&logistic_profile_code='+this.companyId,
+        headers: {
+          'Authorization': 'Bearer ' + this.Token
+        }
+      })
+      .then( response => {
+        //console.log(response.data)
+        if ( response.data.status == 'success' ) {
+          this.fetchDislikes();
+          this.loadDL = false;
+        }else {
+          //console.log(response.data)
+          this.fetchDislikes()
+          this.loadDL = false;
+        }
+      })
+      .catch( err => {
+        console.log(err)
+      });
+    },
+    async fetchLikes() {
+      await axios({
+        method: 'GET',
+        url: '/user_auth/view_likes?logistic_profile_code='+this.companyId,
+        headers: {
+          'Authorization': 'Bearer ' + this.Token
+        }
+      })
+      .then( response => {
+        //console.log(response.data)
+        if ( response.data.status == 'success' ) {
+          this.allLikes = response.data.likes_count
+        }
+      })
+      .catch( err => {
+        console.log(err)
+      });
+    },
+    async fetchDislikes() {
+      await axios({
+        method: 'GET',
+        url: '/user_auth/view_dis_likes?logistic_profile_code='+this.companyId,
+        headers: {
+          'Authorization': 'Bearer ' + this.Token
+        }
+      })
+      .then( response => {
+        //console.log(response.data)
+        if ( response.data.status == true ) {
+          this.alldisLikes = response.data.likes_count
+        }
+      })
+      .catch( err => {
+        console.log(err)
+      });
     }
   },
   components: {
@@ -334,6 +429,8 @@ export default {
   mounted() {
     this.fetchLogistic();
     this.fetchComments();
+    this.fetchLikes();
+    this.fetchDislikes();
   }
 }
 </script>

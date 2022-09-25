@@ -5,7 +5,7 @@
         <div class="row pt-4 pb-4">
           <div class="col-sm-4 m-auto">
             <div class="input-group">
-              <input type="search" id="com_search" v-model="search" class="form-control" placeholder="Search company" style="border-right:0;box-shadow:none;">
+              <input type="search" id="com_search" v-model="search" class="form-control" placeholder="Search by name and areas covered" style="border-right:0;box-shadow:none;">
               <div class="input-group-append">
                 <label for="com_search" class="input-group-text bg-white"><i class="fa fa-search"></i></label>
               </div>
@@ -24,7 +24,13 @@
             </div>
           </div>
         </div>
-        <h6 class="text-secondary" v-if="search">Showing result of <i>"{{ search }}"</i></h6>
+        <h6 class="text-secondary" v-if="search">Showing {{ Object.keys(filteredData).length }} result for <i>"{{ search }}"</i></h6>
+      </div>
+    </div>
+    
+    <div class="row" v-if="loadResponse">
+      <div class="contain">
+        <p class="m-0 bg-light rounded p-4" style="font-size:1.2em;">{{ loadResponse }}</p>
       </div>
     </div>
 
@@ -78,10 +84,12 @@
         </div>
       </div>
     </div>
-
     <div class="row mt-3 mb-5" v-if="!sectionLoader">
       <div class="contain">
         <div class="row">
+          <div class="col-sm-12" v-if="Object.keys(filteredData).length < 1">
+            <p class="m-0 bg-light text-center rounded p-4" style="font-size:1.2em;">No results found</p>
+          </div>
           <div class="col-sm-6" v-for="companies in filteredData" :key="companies.profile_code">
             <router-link :to="{name:'Logistics', params:{company_id:companies.profile_code}}" class="w-100 p-3 logistic-item d-block">
               <div class="row m-0 w-100">
@@ -114,22 +122,21 @@
 
 <script>
 import axios from 'axios';
-//import {store} from '../store'
+import {store} from '../store'
 export default {
   data() {
     return {
       LogistIcs: {},
       Token: sessionStorage.getItem("Token"),
       sectionLoader: true,
-      search: ''
-      //store
+      search: '',
+      store,
+      loadResponse: '',
     }
   },
   methods: {
     async fetchLogistics() {
-      await axios({
-        url: "user_auth/logistic_list",
-        method: "GET",
+      await axios.get("user_auth/logistic_list", {
         headers: {
           'Authorization': 'Bearer ' + this.Token
         }
@@ -140,10 +147,11 @@ export default {
         this.sectionLoader = false
       })
       .catch( err => {
+        this.loadResponse = "Failed, "+err.message;
         console.log("catched error "+err.message);
-        this.sectionLoader = false
+        this.sectionLoader = false;
       })
-    },
+    }
   },
   computed: {
     filteredData() {
@@ -167,6 +175,9 @@ export default {
 </script>
 
 <style scoped>
+#com_search {
+  font-size: 0.8em;
+}
 .logistic-item {
   border-radius: 10px;
   transition: all 0.4s;

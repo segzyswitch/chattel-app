@@ -32,7 +32,8 @@ import {globals} from '../globals'
 export default {
   data() {
     return {
-      globals
+      globals,
+      Token: sessionStorage.getItem('Token'),
     }
   },
   methods: {

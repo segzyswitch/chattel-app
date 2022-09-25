@@ -1,5 +1,5 @@
 <template>
-  <title>Chattel | Dashboard</title>
+  <title>Agreement requests | Chattel</title>
   <div class="container-fluid">
     <div class="row">
       <pageSidebar />
@@ -8,7 +8,7 @@
         <nav class="row top-nav sticky-top">
           <div class="contain">
             <div class="float-left pt-2 pb-2 text-primary">
-              <h5 class="pt-3">CopperEagle Logistics</h5>
+              <h5 class="pt-3">{{ globals.userDetails.business_name }}</h5>
             </div>
             <div class="float-right p-2">
               <router-link to="/my-notification" class="d-block pt-3 pb-3 text-primary"><i class="fa fa-bell"></i></router-link>
@@ -29,34 +29,17 @@
           <div class="contain">
             <div class="row">
               <div class="col-sm-12">
-                <div class="w-100 bg-white p-3">
-                  <router-link to="/show-agreement" class="bg-light p-2 col-sm-6 mb-2 d-block text-dark">
+                <div class="w-100 bg-white p-3" v-if="!agreements">
+                  <div class="bg-secondary p-3 col-sm-6 mb-2 d-block fake"></div>
+                  <div class="bg-secondary p-3 col-sm-6 mb-2 d-block fake" style="animation-delay:0.2s;"></div>
+                  <div class="bg-secondary p-3 col-sm-6 mb-2 d-block fake" style="animation-delay:0.4s;"></div>
+                </div>
+                <div class="w-100 bg-white p-3" v-if="agreements">
+                  <router-link v-for="item in agreements" :key="item.id"
+                  :to="{name:'showAgreement', params:{agreement_key:item.agreement_key}}"
+                    class="bg-light p-2 col-sm-6 mb-2 d-block text-dark">
                     <i class="fa fa-book float-left d-block p-1"></i>
-                    <span class="f-block flaot-left pl-2">Kayode Bamidele Filled Agreement Form</span>
-                  </router-link>
-                  <router-link to="/show-agreement" class="bg-light p-2 col-sm-6 mb-2 d-block text-dark">
-                    <i class="fa fa-book float-left d-block p-1"></i>
-                    <span class="f-block flaot-left pl-2">Kayode Bamidele Filled Agreement Form</span>
-                  </router-link>
-                  <router-link to="/show-agreement" class="bg-light p-2 col-sm-6 mb-2 d-block text-dark">
-                    <i class="fa fa-book float-left d-block p-1"></i>
-                    <span class="f-block flaot-left pl-2">Kayode Bamidele Filled Agreement Form</span>
-                  </router-link>
-                  <router-link to="/show-agreement" class="bg-light p-2 col-sm-6 mb-2 d-block text-dark">
-                    <i class="fa fa-book float-left d-block p-1"></i>
-                    <span class="f-block flaot-left pl-2">Kayode Bamidele Filled Agreement Form</span>
-                  </router-link>
-                  <router-link to="/show-agreement" class="bg-light p-2 col-sm-6 mb-2 d-block text-dark">
-                    <i class="fa fa-book float-left d-block p-1"></i>
-                    <span class="f-block flaot-left pl-2">Kayode Bamidele Filled Agreement Form</span>
-                  </router-link>
-                  <router-link to="/show-agreement" class="bg-light p-2 col-sm-6 mb-2 d-block text-dark">
-                    <i class="fa fa-book float-left d-block p-1"></i>
-                    <span class="f-block flaot-left pl-2">Kayode Bamidele Filled Agreement Form</span>
-                  </router-link>
-                  <router-link to="/show-agreement" class="bg-light p-2 col-sm-6 mb-2 d-block text-dark">
-                    <i class="fa fa-book float-left d-block p-1"></i>
-                    <span class="f-block flaot-left pl-2">Kayode Bamidele Filled Agreement Form</span>
+                    <span class="f-block flaot-left pl-2">Agreement form recieved</span>
                   </router-link>
                 </div>
               </div>
@@ -70,14 +53,41 @@
 
 <script>
 import pageSidebar from '../components/company-sidebar.vue'
+import { globals } from '../globals'
+import axios from 'axios'
 export default {
   data() {
     return {
-
+      globals,
+      agreements: null,
+      Token: sessionStorage.getItem('Token'),
+      ProfileCode: sessionStorage.getItem('ProfileCode'),
+    }
+  },
+  methods: {
+    async fetchAgreement() {
+      await axios({
+        url: '/logistic_user_auth/agreement_lists?logistic_profile_code='+this.ProfileCode,
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + this.Token
+        }
+      })
+      .then( response => {
+        this.agreements = response.data.agreement_list
+        console.log(response.data)
+      })
+      .catch( err => {
+        console.log(err)
+      })
     }
   },
   components: {
     pageSidebar
+  },
+  mounted() {
+    this.globals.getUser;
+    this.fetchAgreement();
   }
 }
 </script>

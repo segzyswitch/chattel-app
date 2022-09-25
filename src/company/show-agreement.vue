@@ -8,7 +8,7 @@
         <nav class="row top-nav sticky-top">
           <div class="contain">
             <div class="float-left pt-2 pb-2 text-primary">
-              <h5 class="pt-3">CopperEagle Logistics</h5>
+              <h5 class="pt-3">{{ globals.userDetails.business_name }}</h5>
             </div>
             <div class="float-right p-2">
               <router-link to="/my-notification" class="d-block pt-3 pb-3 text-primary"><i class="fa fa-bell"></i></router-link>
@@ -51,14 +51,18 @@
 
 <script>
 import pageSidebar from '../components/company-sidebar.vue'
+import { globals } from '../globals'
 export default {
   data() {
     return {
-
+      globals
     }
   },
   components: {
     pageSidebar
+  },
+  mounted() {
+    this.globals.getUser();
   }
 }
 </script>

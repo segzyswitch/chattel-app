@@ -163,7 +163,7 @@ const routes = [
         meta: {auth: true}
     },
     {
-        path: "/show-agreement",
+        path: "/show-agreement/:agreement_key",
         name: "showAgreement",
         component: () =>
         import(/* webpackChunkName: "showAgreement" */ "../src/company/show-agreement.vue"),

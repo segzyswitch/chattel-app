@@ -14,13 +14,13 @@
             <form method="get" action="/" @submit.prevent="companyLogin()" class="reg-form">
               <div class="form-group">
                 <label>Company Email</label>
-                <input type="text" name="email_addr" v-model="email_addr" class="form-control" required />
-                <small class="d-block text-danger" v-if="emailErr">{{ emailErr }}</small>
+                <input type="text" name="email_addr" v-model="formdata.email_addr" class="form-control" required />
+                <small class="d-block text-danger" v-if="formErr.email_addr">{{ formErr.email_addr }}</small>
               </div> 
               <div class="form-group">
                 <label>Password</label>
-                <input type="password" name="paswrd" v-model="userpaswrd" class="form-control" required />
-                <small class="d-block text-danger" v-if="paswordErr">{{ paswordErr }}</small>
+                <input type="password" name="paswrd" v-model="formdata.userpaswrd" class="form-control" required />
+                <small class="d-block text-danger" v-if="formErr.userpaswrd">{{ formErr.userpaswrd }}</small>
               </div> 
               <div class="form-group text-right">
                 <router-link class="text-primary" to="forgot-password">Forgot Password?</router-link>
@@ -29,7 +29,7 @@
                 <div class="alert alert-danger" v-if="loginErr">{{ loginErr }}</div>
               </div>
               <div class="form-group">
-                <button type="submit" v-if="!loadBtn" :disabled="!inputOk" class="btn btn-primary btn-block">Login</button>
+                <button type="submit" v-if="!loadBtn" :disabled="!formOk" class="btn btn-primary btn-block">Login</button>
                 <button type="button" disabled v-if="loadBtn" class="btn btn-primary btn-block"><i class="fa fa-spinner fa-spin"></i> Loading</button>
                 <!-- <router-link to="/company" class="btn btn-primary btn-block">Login</router-link> -->
               </div>
@@ -48,10 +48,8 @@ import axios from 'axios'
 export default {
   data() {
     return {
-      email_addr: '',
-      userpaswrd: '',
-      emailErr: '',
-      paswordErr: '',
+      formdata: {},
+      formErr: {},
       loadBtn: false,
       loginErr: null
     }
@@ -61,8 +59,8 @@ export default {
       this.loginErr = null;
       this.loadBtn = true;
       const fd = new FormData();
-      fd.append('email', this.email_addr);
-      fd.append('password', this.userpaswrd);
+      fd.append('email', this.formdata.email_addr);
+      fd.append('password', this.formdata.userpaswrd);
 
       await axios({
         url: '/logistic_user_auth/login',
@@ -72,7 +70,7 @@ export default {
       })
       .then( response => {
         if ( response.data.status == 'success' ) {
-          console.log(response.data)
+          //console.log(response.data)
           this.Token = response.data.token;
           this.ProfileCode = response.data.user.profile_code;
           sessionStorage.setItem("Token", response.data.token);
@@ -91,20 +89,30 @@ export default {
     }
   },
   computed: {
-    inputOk() {
-      if
-      (!this.email_addr.toLowerCase()
-      .match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      ))
-      {
-        return false
-      }else
-      if ( this.userpaswrd.length < 4 ) {
-        return false
-      }else {
-        return true
+    formOk() {
+      let formdata = this.formdata;
+      let formErr = this.formErr;
+
+      if ( formdata.email_addr || formdata.email_addr=="" ) {
+        if ( !formdata.email_addr.toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/) ) {
+          formErr.email_addr = "Invalid email address";
+          return false;
+        }else {
+          formErr.email_addr = null;
+        }
       }
+      if ( formdata.userpaswrd || formdata.userpaswrd=="" ) {
+        if ( formdata.userpaswrd.length < 8 ) {
+          formErr.userpaswrd = "Password too short";
+          return false;
+        }else {
+          formErr.userpaswrd = null;
+        }
+      }
+      if ( Object.keys(formdata).length < 2 ) {
+        return false;
+      }
+      return true;
     }
   }
 }

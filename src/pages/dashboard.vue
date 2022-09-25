@@ -48,7 +48,7 @@ export default {
     homeLogistics
   },
   mounted() {
-    store.getUser()
+    store.getUser();
   }
 }
 </script>

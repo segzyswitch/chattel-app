@@ -14,17 +14,19 @@
             <form method="POST" @submit.prevent="userLogin()" class="reg-form">
               <div class="form-group">
                 <label>Email Address</label>
-                <input type="email" v-model="email" class="form-control" required />
+                <input type="email" v-model="formdata.email" class="form-control" />
+                <small class="text-danger" v-if="formErr.email">{{ formErr.email }}</small>
               </div> 
               <div class="form-group">
                 <label>Password</label>
-                <input type="password" v-model="password" class="form-control" required />
+                <input type="password" v-model="formdata.password" class="form-control" />
+                <small class="text-danger" v-if="formErr.password">{{ formErr.password }}</small>
               </div> 
               <div class="form-group text-right">
                 <router-link class="text-primary" to="forgot-password">Forgot Password?</router-link>
               </div>
               <div class="form-group">
-                <button type="sumbit" v-if="!loadBtn" class="btn btn-primary btn-block">Login</button>
+                <button type="sumbit" v-if="!loadBtn" :disabled="!formOk" class="btn btn-primary btn-block">Login</button>
                 <button type="button" v-if="loadBtn" class="btn btn-primary btn-block disabled"><i class="fa fa-spinner fa-spin"></i> Loading</button>
               </div>
               <div class="form-group">
@@ -43,8 +45,8 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      email: '',
-      password: '',
+      formdata: {},
+      formErr: {},
       loadBtn: false
     }
   },
@@ -55,8 +57,8 @@ export default {
         url: 'user_auth/login',
         method: "POST",
         data: {
-          'email': this.email,
-          'password': this.password
+          'email': this.formdata.email,
+          'password': this.formdata.password
         }
       })
       .then( response => {
@@ -91,6 +93,33 @@ export default {
         })
         this.loadBtn = false
       })
+    }
+  },
+  computed: {
+    formOk() {
+      let formdata = this.formdata;
+      let formErr = this.formErr;
+
+      if ( formdata.email || formdata.email=="" ) {
+        if ( !formdata.email.toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/) ) {
+          formErr.email = "Invalid email address";
+          return false;
+        }else {
+          formErr.email = null;
+        }
+      }
+      if ( formdata.password || formdata.password=="" ) {
+        if ( formdata.password.length < 8 ) {
+          formErr.password = "Password too short";
+          return false;
+        }else {
+          formErr.password = null;
+        }
+      }
+      if ( Object.keys(formdata).length < 2 ) {
+        return false;
+      }
+      return true;
     }
   },
   mounted() {
