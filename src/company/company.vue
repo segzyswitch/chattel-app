@@ -19,7 +19,6 @@
           <div class="contain">
             <div class="row">
               <div class="col-sm-8 mb-5">
-                
                 <div class="init-img d-flex m-auto bg-primary text-white">
                   <div class="w-100 m-auto text-center">
                     <h1 v-if="globals.userDetails.business_name">
